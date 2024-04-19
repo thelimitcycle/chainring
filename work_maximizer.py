@@ -66,6 +66,16 @@ def create_damping_matrix(num_nodes):
 # Example parameters
 
 def work_optimizer(f_path):
+    #TODO:
+    #1. create a dataframe for keeping track of the following parameters
+    #   -length
+    #   -work
+    #   -percentage difference from round
+    #2. make plots of each of the gear profiles and the efficiency changes.
+    #3. i think the best way to do this is to return a dictionary and then append the dictionary to a dataframe
+    #in the main function
+    profile_name = f_path.split(r'/')[1][:-4]
+
     force_data = pd.read_csv(f_path,skiprows=[0,1,2,3,4,5,6,8],delim_whitespace=True)
     fn = force_data['Fn'].to_numpy()[:-1]
     fn = fn + np.roll(fn,180)
@@ -99,14 +109,14 @@ def work_optimizer(f_path):
     torque_original = fn*r_regular
     torque_optimized = fn*r_optimized
 
-    work_original = simpson(torque_original,x=theta)
-    work_optimized = simpson(torque_optimized,x=theta)
+    work_original = np.abs(simpson(torque_original,x=theta))
+    work_optimized = np.abs(simpson(torque_optimized,x=theta))
 
     print("Original work = " + str(work_original))
     print("optimized work = " + str(work_optimized))
     rpo = C_ang.dot(r_optimized)
-    print(str(r_optimized.max()))
-    print(str(r_optimized.min()))
+    #print(str(r_optimized.max()))
+    #print(str(r_optimized.min()))
     print("circumference of original gear (theoretical): " + str(round_perimeter))
     print("circumference of original gear (numerical): " + str(simpson(r_regular,x=theta)))
     print("circumference of optimized gear (numerical): " + str(simpson(np.sqrt(r_optimized*r_optimized + rpo*rpo),x=theta)))
@@ -114,26 +124,42 @@ def work_optimizer(f_path):
     #print(yp.shape)
     #plt.plot(theta,r_regular, theta,r_optimized)
     #plt.figure()
+
     plt.plot(theta,torque_original,theta,torque_optimized)
     plt.legend(["torque with round gear", "torque with optimized gear"])
     plt.xlabel("crank angle (rad)")
     plt.ylabel("torque (Nm)")
     plt.xlim([0, 2*np.pi])
     plt.ylim([-75,0])
-    plt.show()
+    plt.savefig('plots/torque/' + profile_name +'_torque.png')
+    #plt.show()
 
     #eeeh I'll just transform to cartesian coordinates and then do a scatter
     x_opt = r_optimized*np.sin(theta)
     y_opt = r_optimized*np.cos(theta)
     
-    plt.figure()
+    plt.figure(figsize=(8,8))
     plt.scatter(x_opt,y_opt)
+    plt.title('chainring shape for ')
     plt.ylim([-.15,.15])
     plt.xlim([-.15,.15])
-    plt.show()
+    ax = plt.gca()
+    ax.set_aspect('equal', adjustable='box')
+    plt.savefig('plots/perimeter/' + profile_name + "_perimeter.png")
+    #plt.show()
+
+    results_dict ={'profile':profile_name,
+                   'round_work':work_original,
+                   'optimized_work': work_optimized}
+    return results_dict
 
 if __name__ ==  "__main__":
     fnames = os.listdir("kautz/")
+    col_names = ['profile', 'round_work','optimized_work']
+    df = pd.DataFrame(columns=col_names)
     for fname in fnames:
-        if fname =="highw.avg":
-            work_optimizer("kautz/" + fname)
+        result = work_optimizer("kautz/" + fname)
+        df.loc[len(df.index)] = result
+
+    df['percentage_difference'] = 100*(df['optimized_work'] - df['round_work']).div(df['round_work'])
+    print(df)
