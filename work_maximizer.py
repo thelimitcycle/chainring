@@ -131,6 +131,7 @@ def work_optimizer(f_path):
     plt.ylabel("torque (Nm)")
     plt.xlim([0, 2*np.pi])
     plt.ylim([-75,0])
+    plt.title('Original and optimized torque values for ' + profile_name)
     plt.savefig('plots/torque/' + profile_name +'_torque.png')
     #plt.show()
 
@@ -140,7 +141,7 @@ def work_optimizer(f_path):
     
     plt.figure(figsize=(8,8))
     plt.scatter(x_opt,y_opt)
-    plt.title('chainring shape for ')
+    plt.title('chainring shape for '+ profile_name)
     plt.ylim([-.15,.15])
     plt.xlim([-.15,.15])
     ax = plt.gca()
