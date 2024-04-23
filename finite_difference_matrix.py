@@ -1,11 +1,12 @@
 import numpy as np
 from scipy.sparse import diags
 
+#https://web.media.mit.edu/~crtaylor/calculator.html
 
 def create_stiffness_matrix(num_nodes):
     diagonals = [-1.0/12* np.ones(num_nodes-2),
                 4.0/3 * np.ones(num_nodes-1),
-                -15.0/4 * np.ones(num_nodes),
+                -5.0/2 * np.ones(num_nodes),
                 4.0/3 * np.ones(num_nodes-1),
                 -1.0/12* np.ones(num_nodes-2)]
     
@@ -17,9 +18,11 @@ def create_stiffness_matrix(num_nodes):
     stiffness_matrix[1,0:5] = 1.0/12 * np.array([11,-20,6,4,-1])
 
     #bounday conditions
-    stiffness_matrix[num_nodes-2,0:5] = 1.0/12 * np.array([-1,4,6,-20,11])
-    stiffness_matrix[num_nodes-1,0:5] = 1.0/12 * np.array([11,-56,114,-104,35])
+    #there is a bug here!
+    stiffness_matrix[num_nodes-2,-5:] = 1.0/12 * np.array([-1,4,6,-20,11])
+    stiffness_matrix[num_nodes-1,-5:] = 1.0/12 * np.array([11,-56,114,-104,35])
 
+    #I think I need some periodic boundary conditions on these matrices
     return stiffness_matrix
 
 
