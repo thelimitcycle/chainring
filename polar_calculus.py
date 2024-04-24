@@ -27,6 +27,7 @@ plt.show()
 
 #lets plot something more exagerated
 #https://math.stackexchange.com/questions/315386/ellipse-in-polar-coordinates
+#plot an ellipse
 a = 2
 b = 1
 
@@ -37,20 +38,29 @@ r2 = a*b / np.sqrt((b*np.cos(theta))**2 + (a*np.sin(theta))**2) # oval
 
 #I think I need som periodic bounday conditions on the matrices
 C = create_damping_matrix(n)
-h = 2*np.pi / n
-r2p = (1.0/h)*C.dot(r2)
-r2pp2 = (1.0/h)*C.dot(r2p)
 K = create_stiffness_matrix(n)
 
-#wait f, I think I need to do the chain rule
-#https://mechref.engr.illinois.edu/dyn/rvy.html maybe
+#grid spacing
+h = 2*np.pi / n
+drdtheta = (1.0/h)*C.dot(r2)
+d2rdtheta2 = (1.0/h**2)*K.dot(r2)
 
-#I think there is a bug here or boundary conditions aren't correct
-#https://www.cs.auckland.ac.nz/courses/compsci369s1c/lectures/GG-notes/Z-archive2010/CS369-FDM-FEM.pdf
+
+#bummer, I think I need to convert to rectangular to get the derivatives...
+
 # I think I need to implement 2nd order 
-r2pp = (1/h**2)*K.dot(r2)
+
+#polar derivatives:
+#https://www.whitman.edu/mathematics/calculus_online/section10.02.html
+#its a good resource. I'm going to program this prof's formulae for first and second derivatives
+
+# the C and K matrices should be for the derivatives with respect to theta. 
+
+dydx = (r2*np.cos(theta) + drdtheta*np.sin(theta))/(-1.0*r*np.sin(theta) + r2*np.cos(theta))
+
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+
 ax.plot(theta, r2,theta, r2p,theta, r2pp)
 ax.set_rmax(2)
 ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
