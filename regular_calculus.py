@@ -18,4 +18,8 @@ ypp = 1.0/(h*h)*K.dot(y)
 
 plt.figure()
 plt.plot(x,y,x,yp,x,ypp)
+plt.ylabel('y')
+plt.xlabel('x')
+plt.legend(['y', 'dy/dx', 'd2y/dx2'])
+plt.title('function and its first and second derivatives')
 plt.show()
