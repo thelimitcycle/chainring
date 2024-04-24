@@ -64,6 +64,21 @@ dydx = (r2*np.cos(theta) + drdtheta*np.sin(theta))/(-1.0*r2*np.sin(theta) + drdt
 #using numerics in the numerator
 d2ydx2 = (1.0/h)*C.dot(dydx)/(drdtheta*np.cos(theta) - r2*np.sin(theta))
 
+#can this all be one giant matrix?
+## this my idea. I know I can take the derivative with a matrix
+## I should be able to integrate with a matrix. I can take the second derivative with a matrix
+## so I should be able to have some sort of over-contrained set of linear equations 
+## where I try and use a linear least square fit to a series of difference equations for the 
+## equiperimetric contraint, and the concavity constraints. 
+
+## it should be possible I just need to setup the matrix. It's going to be a weird one.
+
+#lets see if I can find the points where the second derivative changes sign. 
+# is there anything else that I can use?
+
+#maybe gradient descent?
+#https://en.wikipedia.org/wiki/Gradient_descent
+
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
 ax.plot(theta, r2)
