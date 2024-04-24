@@ -62,3 +62,14 @@ def create_damping_matrix(num_nodes):
 
     #print(damping_matrix.shape)
     return damping_matrix
+
+
+#simpson's rule matrix goes here
+# a matrix approach to numerical intrgration maybe
+# thats right the fancy name is 'quadrature'
+
+# may have to implement a numerical quadrature algorithm and use polynomial or cosine 
+# basis functions. like semhat
+#https://www3.nd.edu/~coast/jjwteach/www/www/60130/New%20Lecture%20Notes_PDF/CE60130_Lecture%2013%20with_footer-v04.pdf
+
+
