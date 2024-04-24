@@ -64,6 +64,9 @@ def create_damping_matrix(num_nodes):
     return damping_matrix
 
 
+def simpsons_rule_matrix(num_nodes):
+    #I think its a lower triangular matrix with the columns being the simpson's coefficients
+    # wait I'm not sure if the intragral as a function will work. 
 #simpson's rule matrix goes here
 # a matrix approach to numerical intrgration maybe
 # thats right the fancy name is 'quadrature'
