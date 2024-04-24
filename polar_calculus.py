@@ -42,6 +42,8 @@ K = create_stiffness_matrix(n)
 
 #grid spacing
 h = 2*np.pi / n
+
+#take derivates of r(theta) with respect to theta
 drdtheta = (1.0/h)*C.dot(r2)
 d2rdtheta2 = (1.0/h**2)*K.dot(r2)
 
@@ -61,7 +63,7 @@ dydx = (r2*np.cos(theta) + drdtheta*np.sin(theta))/(-1.0*r*np.sin(theta) + r2*np
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
-ax.plot(theta, r2,theta, r2p,theta, r2pp)
+ax.plot(theta, r2,theta, drdtheta,theta, d2rdtheta2)
 ax.set_rmax(2)
 ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
 ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
@@ -71,7 +73,7 @@ ax.set_title("A line plot on a polar axis", va='bottom')
 
 plt.show()
 plt.figure()
-plt.plot(theta,r2, theta,r2p,theta,r2pp)
+plt.plot(theta,r2, theta,dydx)
 plt.show()
 
 #ok now this should be fun. 
