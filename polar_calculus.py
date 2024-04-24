@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # so I'm practicing the numerics here
 
 #get my angle
-n = 360
+n = 3600
 theta = 2* np.pi*np.arange(n)/n 
 
 #just a circle
@@ -47,9 +47,6 @@ h = 2*np.pi / n
 drdtheta = (1.0/h)*C.dot(r2)
 d2rdtheta2 = (1.0/h**2)*K.dot(r2)
 
-
-#bummer, I think I need to convert to rectangular to get the derivatives...
-
 # I think I need to implement 2nd order 
 
 #polar derivatives:
@@ -58,22 +55,36 @@ d2rdtheta2 = (1.0/h**2)*K.dot(r2)
 
 # the C and K matrices should be for the derivatives with respect to theta. 
 
-dydx = (r2*np.cos(theta) + drdtheta*np.sin(theta))/(-1.0*r*np.sin(theta) + r2*np.cos(theta))
+dydx = (r2*np.cos(theta) + drdtheta*np.sin(theta))/(-1.0*r2*np.sin(theta) + drdtheta*np.cos(theta))
+#I think this guy's derivation is incomplete for the second derivative
+#he says its (d(dydx)/d(theta)) / (dx/d(theta))
+#but x = r*cos(theta) 
+#so dx/d(theta) = dr/dtheta * cos(theta) - r(theta)*sin(theta)
 
+#using numerics in the numerator
+d2ydx2 = (1.0/h)*C.dot(dydx)/(drdtheta*np.cos(theta) - r2*np.sin(theta))
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
-ax.plot(theta, r2,theta, drdtheta,theta, d2rdtheta2)
+ax.plot(theta, r2)
 ax.set_rmax(2)
 ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
 ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
 ax.grid(True)
 
-ax.set_title("A line plot on a polar axis", va='bottom')
+ax.set_title("an oval", va='bottom')
 
+#plot in rectangular coordinates. 
+
+#looks like the second derivative is showing some sin(1/x) like behavior where it is unstable
 plt.show()
 plt.figure()
-plt.plot(theta,r2, theta,dydx)
+plt.plot(theta,r2, theta,dydx, theta, d2ydx2)
+plt.ylim([-4,4])
+plt.legend(['radius (r)', 'dy/dx instantaneous slope', 'd2y/dx2 second derivative'])
+plt.title('an oval and its first and second derivatives')
+plt.xlabel('angle [rad]')
+plt.ylabel('r')
 plt.show()
 
 #ok now this should be fun. 
