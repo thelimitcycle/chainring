@@ -67,12 +67,34 @@ def create_damping_matrix(num_nodes):
 def simpsons_rule_matrix(num_nodes):
     #I think its a lower triangular matrix with the columns being the simpson's coefficients
     # wait I'm not sure if the intragral as a function will work. 
-#simpson's rule matrix goes here
-# a matrix approach to numerical intrgration maybe
-# thats right the fancy name is 'quadrature'
+    #simpson's rule matrix goes here
+    # a matrix approach to numerical intrgration maybe
+    # thats right the fancy name is 'quadrature'
 
-# may have to implement a numerical quadrature algorithm and use polynomial or cosine 
-# basis functions. like semhat
-#https://www3.nd.edu/~coast/jjwteach/www/www/60130/New%20Lecture%20Notes_PDF/CE60130_Lecture%2013%20with_footer-v04.pdf
+    # may have to implement a numerical quadrature algorithm and use polynomial or cosine 
+    # basis functions. like semhat
+    #https://www3.nd.edu/~coast/jjwteach/www/www/60130/New%20Lecture%20Notes_PDF/CE60130_Lecture%2013%20with_footer-v04.pdf
 
 
+    #I think I can do it with simpson's rule
+    n = num_nodes
+
+    S = np.ones((n,n))
+    for k in range(n):
+        if k == 0:
+            pass
+        elif k == n-1:
+            pass
+        elif k%2 == 1:
+            S[:,k] = S[:,k]*4
+        else:
+            S[:,k] = 2*S[:,k]
+        S[k,k] = 1
+    S = np.tril(S)
+
+    for k in range(n):
+        if k%2 != 0:
+            S[k,:] = np.roll(S[k-1,:],1)
+
+    #print(S)
+    return(S)
