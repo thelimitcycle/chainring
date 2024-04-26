@@ -89,7 +89,7 @@ def simpsons_rule_matrix(num_nodes):
             S[:,k] = S[:,k]*4
         else:
             S[:,k] = 2*S[:,k]
-        S[k,k] = 1
+
     S = np.tril(S)
 
     for k in range(n):
