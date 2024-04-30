@@ -4,8 +4,9 @@ from scipy.integrate import simpson
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-from finite_difference_matrix import create_damping_matrix 
-from finite_difference_matrix import create_stiffness_matrix
+from finite_difference_matrix import damping_matrix 
+from finite_difference_matrix import stiffness_matrix
+from finite_difference_matrix import simpsons_rule_matrix
 
 # Example parameters
 

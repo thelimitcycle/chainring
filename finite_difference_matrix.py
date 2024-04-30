@@ -3,7 +3,7 @@ from scipy.sparse import diags
 
 #https://web.media.mit.edu/~crtaylor/calculator.html
 
-def create_stiffness_matrix(num_nodes):
+def stiffness_matrix(num_nodes):
     diagonals = [-1.0/12* np.ones(num_nodes-2),
                 4.0/3 * np.ones(num_nodes-1),
                 -5.0/2 * np.ones(num_nodes),
@@ -26,7 +26,7 @@ def create_stiffness_matrix(num_nodes):
     return stiffness_matrix
 
 
-def create_damping_matrix(num_nodes):
+def damping_matrix(num_nodes):
     # Assuming 1D truss elements with constant material properties
     diagonals = [1.0/12* np.ones(num_nodes-2),
                 -8.0/12 * np.ones(num_nodes-1),
@@ -77,24 +77,20 @@ def simpsons_rule_matrix(num_nodes):
 
 
     #I think I can do it with simpson's rule
-    n = num_nodes
 
-    S = np.ones((n,n))
-    for k in range(n):
-        if k == 0:
+    #I think I'm just going to use this:
+    #https://www.msme.us/2017-2-1.pdf
+    #build up the S matrix
+    
+    S = np.zeros((num_nodes,num_nodes))
+    for k in range(num_nodes):
+        if k ==0:
             pass
-        elif k == n-1:
-            pass
-        elif k%2 == 1:
-            S[:,k] = S[:,k]*4
+        elif k == 1:
+            S[k,0:3] = np.array([1.25,2,-0.25])
         else:
-            S[:,k] = 2*S[:,k]
-
-    S = np.tril(S)
-
-    for k in range(n):
-        if k%2 != 0:
-            S[k,:] = np.roll(S[k-1,:],1)
-
-    #print(S)
+            simps_stencil = np.zeros(k+1)
+            simps_stencil[-3:] = np.array([1,4,1])
+            print(S)
+            S[k,0:k+1] = S[k-2,0:k+1] + simps_stencil
     return(S)
