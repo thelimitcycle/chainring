@@ -91,6 +91,5 @@ def simpsons_rule_matrix(num_nodes):
         else:
             simps_stencil = np.zeros(k+1)
             simps_stencil[-3:] = np.array([1,4,1])
-            print(S)
             S[k,0:k+1] = S[k-2,0:k+1] + simps_stencil
     return(S)
