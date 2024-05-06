@@ -93,6 +93,12 @@ ax.set_title("an oval", va='bottom')
 
 #looks like the second derivative is showing some sin(1/x) like behavior where it is unstable
 plt.show()
+
+y = r2*np.sin(theta)
+x = r2*np.cos(theta)
+
+plt.figure()
+plt.plot
 plt.figure()
 plt.plot(theta,r2, theta,dydx, theta, d2ydx2)
 plt.ylim([-4,4])
