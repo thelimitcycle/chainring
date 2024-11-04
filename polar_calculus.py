@@ -11,9 +11,11 @@ import matplotlib.pyplot as plt
 
 #ffff I'm going to have to set up a virtual environment
 #https://stackoverflow.com/questions/75602063/pip-install-r-requirements-txt-is-failing-this-environment-is-externally-mana/75696359#75696359
-n = 3600
+n = 10000
 theta = 2* np.pi*np.arange(n)/n 
 
+plt.figure()
+plt.plot(theta)
 #just a circle
 r = 1*np.ones(len(theta))
 
@@ -35,7 +37,9 @@ a = 2
 b = 1
 
 #playing with different values
+
 r2 = np.sin(theta)
+#r2 = 1 + 0.5*np.sin(6*theta)
 #r2 = a*b / np.sqrt((b*np.cos(theta))**2 + (a*np.sin(theta))**2) # oval
 #r2 = np.sin(2*theta)
 
@@ -88,30 +92,38 @@ d2ydx2 = (1.0/h)*C.dot(dydx)/(drdtheta*np.cos(theta) - r2*np.sin(theta))
 #formula for curvature. first with real numbers
 #https://mathworld.wolfram.com/Curvature.html
 #http://mathonline.wikidot.com/the-curvature-of-plane-polar-curves
-curvature = (2*drdtheta*drdtheta - r*d2rdtheta2 + r*r) / np.power((drdtheta*drdtheta + r*r),1.5)
+curvature = (2*drdtheta*drdtheta - r2*d2rdtheta2 + r2*r2) / np.power((drdtheta*drdtheta + r2*r2),1.5)
 
-fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
-ax.plot(theta, r2)
-ax.set_rmax(2)
-ax.set_rticks([0.5, 1, 1.5, 2])  # fewer radial ticks
-ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
-ax.grid(True)
+# I think this may all be garbage
+# fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
-ax.set_title("an oval", va='bottom')
+# ax.plot(theta, r2)
+# ax.set_rmax(2)
+# ax.set_rticks([0.5, 1, 1.5, 2])  # fewer radial ticks
+# ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
+# ax.grid(True)
+
+# ax.set_title("an oval", va='bottom')
 
 #plot in rectangular coordinates. 
 
 #looks like the second derivative is showing some sin(1/x) like behavior where it is unstable
-plt.show()
+#plt.show()
 
 y = r2*np.sin(theta)
 x = r2*np.cos(theta)
+plt.figure()
+plt.plot(x,y)
+plt.title('r2 plotted kind of in a parametric way')
+plt.axis('on')
+plt.axis('equal')
+plt.show()
 
 plt.figure()
-plt.plot(theta,r2, theta,dydx, theta, d2ydx2, theta, curvature)
-plt.ylim([-4,4])
-plt.legend(['radius (r)', 'dy/dx instantaneous slope', 'd2y/dx2 second derivative', 'curvature'])
+plt.plot(theta,r2, theta, curvature)
+#plt.ylim([-4,4])
+plt.legend(['radius (r)', 'curvature'])
 plt.title('an oval and its first and second derivatives')
 plt.xlabel('angle [rad]')
 plt.ylabel('r')
