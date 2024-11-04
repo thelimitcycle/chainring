@@ -1,6 +1,6 @@
 import numpy as np
-from finite_difference_matrix import create_stiffness_matrix
-from finite_difference_matrix import create_damping_matrix
+from finite_difference_matrix import stiffness_matrix
+from finite_difference_matrix import damping_matrix
 import matplotlib.pyplot as plt
 
 #so these are experiments with the matrices and with calculus in general in polar coordinates
@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 # so I'm practicing the numerics here
 
 #get my angle
+
+#ffff I'm going to have to set up a virtual environment
+#https://stackoverflow.com/questions/75602063/pip-install-r-requirements-txt-is-failing-this-environment-is-externally-mana/75696359#75696359
 n = 3600
 theta = 2* np.pi*np.arange(n)/n 
 
@@ -31,14 +34,16 @@ plt.show()
 a = 2
 b = 1
 
-r2 = a*b / np.sqrt((b*np.cos(theta))**2 + (a*np.sin(theta))**2) # oval
+#playing with different values
+r2 = np.sin(theta)
+#r2 = a*b / np.sqrt((b*np.cos(theta))**2 + (a*np.sin(theta))**2) # oval
 #r2 = np.sin(2*theta)
 
 #lets see if the dr/dtheta looks like anything...
 
 #I think I need som periodic bounday conditions on the matrices
-C = create_damping_matrix(n)
-K = create_stiffness_matrix(n)
+C = damping_matrix(n)
+K = stiffness_matrix(n)
 
 #grid spacing
 h = 2*np.pi / n
@@ -79,11 +84,17 @@ d2ydx2 = (1.0/h)*C.dot(dydx)/(drdtheta*np.cos(theta) - r2*np.sin(theta))
 #maybe gradient descent?
 #https://en.wikipedia.org/wiki/Gradient_descent
 
+
+#formula for curvature. first with real numbers
+#https://mathworld.wolfram.com/Curvature.html
+#http://mathonline.wikidot.com/the-curvature-of-plane-polar-curves
+curvature = (2*drdtheta*drdtheta - r*d2rdtheta2 + r*r) / np.power((drdtheta*drdtheta + r*r),1.5)
+
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 
 ax.plot(theta, r2)
 ax.set_rmax(2)
-ax.set_rticks([0.5, 1, 1.5, 2])  # Less radial ticks
+ax.set_rticks([0.5, 1, 1.5, 2])  # fewer radial ticks
 ax.set_rlabel_position(-22.5)  # Move radial labels away from plotted line
 ax.grid(True)
 
@@ -98,11 +109,9 @@ y = r2*np.sin(theta)
 x = r2*np.cos(theta)
 
 plt.figure()
-plt.plot
-plt.figure()
-plt.plot(theta,r2, theta,dydx, theta, d2ydx2)
+plt.plot(theta,r2, theta,dydx, theta, d2ydx2, theta, curvature)
 plt.ylim([-4,4])
-plt.legend(['radius (r)', 'dy/dx instantaneous slope', 'd2y/dx2 second derivative'])
+plt.legend(['radius (r)', 'dy/dx instantaneous slope', 'd2y/dx2 second derivative', 'curvature'])
 plt.title('an oval and its first and second derivatives')
 plt.xlabel('angle [rad]')
 plt.ylabel('r')

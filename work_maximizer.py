@@ -28,8 +28,8 @@ def work_optimizer(f_path):
     r_regular = np.ones(len(fn))*r
 
     num_angles = len(fn)
-    C_ang = create_damping_matrix(num_angles)
-    K_ang = create_stiffness_matrix(num_angles)
+    C_ang = damping_matrix(num_angles)
+    K_ang = stiffness_matrix(num_angles)
 
     #print(fn)
     theta = 2*np.pi*np.arange(360)/360
