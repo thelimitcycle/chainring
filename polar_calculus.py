@@ -14,11 +14,8 @@ import matplotlib.pyplot as plt
 n = 10000
 theta = 2* np.pi*np.arange(n)/n 
 
-plt.figure()
-plt.plot(theta)
 #just a circle
 r = 1*np.ones(len(theta))
-
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
 ax.plot(theta, r)
@@ -38,8 +35,8 @@ b = 1
 
 #playing with different values
 
-r2 = np.sin(theta)
-#r2 = 1 + 0.5*np.sin(6*theta)
+#r2 = np.sin(theta) # circle
+r2 = 1 + 0.5*np.sin(6*theta) #starfish
 #r2 = a*b / np.sqrt((b*np.cos(theta))**2 + (a*np.sin(theta))**2) # oval
 #r2 = np.sin(2*theta)
 
